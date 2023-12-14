@@ -47,5 +47,20 @@ This repository makes use of code from the following repositories:
 We thank the authors for making their code publicly available.
 
 ## Citation
-If you use the code in this repository, please cite the following papers:
-
+```
+ @inproceedings{goncalves-strubell-2023-understanding,
+    title = "Understanding the Effect of Model Compression on Social Bias in Large Language Models",
+    author = "Gon{\c{c}}alves, Gustavo  and
+      Strubell, Emma",
+    editor = "Bouamor, Houda  and
+      Pino, Juan  and
+      Bali, Kalika",
+    booktitle = "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing",
+    month = dec,
+    year = "2023",
+    address = "Singapore",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.emnlp-main.161",
+    pages = "2663--2675",
+}
+```

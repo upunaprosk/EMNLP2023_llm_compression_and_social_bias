@@ -92,6 +92,12 @@ class BertModel:
         return transformers.BertModel.from_pretrained(model_name_or_path)
 
 
+
+class AutoModelForCausalLM:
+    def __new__(self, model_name_or_path):
+        return transformers.AutoModelForCausalLM.from_pretrained(model_name_or_path)
+
+
 class AlbertModel:
     def __new__(self, model_name_or_path):
         return transformers.AlbertModel.from_pretrained(model_name_or_path)

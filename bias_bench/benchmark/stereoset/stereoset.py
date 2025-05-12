@@ -192,8 +192,12 @@ class StereoSetRunner:
         else:
             model = self._intrasentence_model.to(device)
 
-        # Assume we are using GPT-2.
-        unconditional_start_token = "<|endoftext|>"
+        # Assume we are using GPT-2/OPT or LLaMA
+        # unconditional_start_token = "<|endoftext|>"
+        if self._tokenizer.eos_token:
+            unconditional_start_token = self._tokenizer.eos_token
+        else:
+            unconditional_start_token = "<|endoftext|>"
         start_token = (
             torch.tensor(self._tokenizer.encode(unconditional_start_token))
             .to(device)
@@ -212,8 +216,7 @@ class StereoSetRunner:
 
             # Ensure that our batch size is 1 and that our inital token isn't split into subwords.
             assert initial_token_probabilities.shape[0] == 1
-            assert initial_token_probabilities.shape[1] == 1
-
+            # assert initial_token_probabilities.shape[1] == 1 => for OPT and LLaMA is equal to vocab size (batch, vocab)
         clusters = stereoset.get_intrasentence_examples()
         predictions = []
         for cluster in tqdm(clusters):

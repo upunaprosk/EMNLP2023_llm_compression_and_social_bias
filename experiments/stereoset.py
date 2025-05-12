@@ -67,6 +67,11 @@ parser.add_argument(
     default=None,
     help="Choose quantization precision (e.g., fp16, int8)."
 )
+parser.add_argument(
+    "--is_quantized",
+    action="store_true",
+    help="Whether the model was quantized with GPTQ."
+)
 
 parser.add_argument(
     "--quant_type",
@@ -118,18 +123,28 @@ if __name__ == "__main__":
     print(f" - revision: {args.revision}")
     print(f" - cache_dir: {args.cache_dir}")
 
-    if args.quant_prec is not None and args.quant_type is not None:
-        if args.revision is None:
-            model = getattr(models, args.model)(args.model_name_or_path, args.quant_prec, args.quant_type)
-        else:
-            model = getattr(models, args.model)(args.model_name_or_path, args.revision, args.cache_dir, args.quant_prec,
-                                                args.quant_type)
-    elif args.revision is not None:
-        model = getattr(models, args.model)(args.model_name_or_path, args.revision, args.cache_dir)
+
+    if args.is_quantized:
+        from gptqmodel import GPTQModel
+        model = GPTQModel.from_quantized(args.model_name_or_path, trust_remote_code=True)
     else:
-        model = getattr(models, args.model)(args.model_name_or_path)
+        if args.quant_prec is not None and args.quant_type is not None:
+            if args.revision is None:
+                model = getattr(models, args.model)(args.model_name_or_path, args.quant_prec, args.quant_type)
+            else:
+                model = getattr(models, args.model)(args.model_name_or_path, args.revision, args.cache_dir, args.quant_prec,
+                                                    args.quant_type)
+        elif args.revision is not None:
+            model = getattr(models, args.model)(args.model_name_or_path, args.revision, args.cache_dir)
+        else:
+            model = getattr(models, args.model)(args.model_name_or_path)
     model.eval()
     tokenizer = transformers.AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=True)
+    _is_generative_model=_is_generative(args.model)
+    if args.model == "AutoModelForCausalLM":
+        _is_generative_model=True
+    if args.is_quantized:
+        _is_generative_model=True
 
     runner = StereoSetRunner(
         intrasentence_model=model,
@@ -137,7 +152,7 @@ if __name__ == "__main__":
         input_file=f"{args.persistent_dir}/data/stereoset/test.json",
         model_name_or_path=args.model_name_or_path,
         batch_size=args.batch_size,
-        is_generative=_is_generative(args.model),
+        is_generative=_is_generative_model,
     )
     results = runner()
 

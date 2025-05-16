@@ -46,7 +46,7 @@ parser.add_argument(
         "SelfDebiasAlbertForMaskedLM",
         "SelfDebiasRobertaForMaskedLM",
     ],
-    help="Model to evalute (e.g., SentenceDebiasBertForMaskedLM).",
+    help="Model to evaluate (e.g., SentenceDebiasBertForMaskedLM).",
 )
 parser.add_argument(
     "--model_name_or_path",

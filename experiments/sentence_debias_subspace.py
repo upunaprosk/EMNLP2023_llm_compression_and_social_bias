@@ -29,7 +29,7 @@ parser.add_argument(
     action="store",
     type=str,
     default="BertModel",
-    choices=["BertModel", "AlbertModel", "RobertaModel", "GPT2Model"],
+    # choices=["BertModel", "AlbertModel", "RobertaModel", "GPT2Model"],
     help="Model (e.g., BertModel) to compute the SentenceDebias subspace for. "
     "Typically, these correspond to a HuggingFace class.",
 )
@@ -38,7 +38,7 @@ parser.add_argument(
     action="store",
     type=str,
     default="bert-base-uncased",
-    choices=["bert-base-uncased", "albert-base-v2", "roberta-base", "gpt2"],
+    # choices=["bert-base-uncased", "albert-base-v2", "roberta-base", "gpt2"],
     help="HuggingFace model name or path (e.g., bert-base-uncased). Checkpoint from which a "
     "model is instantiated.",
 )
@@ -89,6 +89,9 @@ if __name__ == "__main__":
     # Specify a padding token for batched SentenceDebias subspace computation for
     # GPT2.
     if args.model == "GPT2Model":
+        tokenizer.pad_token = tokenizer.eos_token
+
+    if args.model == "AutoModelForCausalLM":
         tokenizer.pad_token = tokenizer.eos_token
 
     if args.bias_type == "gender":

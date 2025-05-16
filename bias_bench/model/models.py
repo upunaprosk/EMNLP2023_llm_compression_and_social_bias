@@ -95,7 +95,7 @@ class BertModel:
 
 class AutoModelForCausalLM:
     def __new__(self, model_name_or_path):
-        return transformers.AutoModelForCausalLM.from_pretrained(model_name_or_path)
+        return transformers.AutoModelForCausalLM.from_pretrained(model_name_or_path, output_hidden_states=True)
 
 
 class AlbertModel:

@@ -10,11 +10,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def _extract_gender_features(
-    model,
-    tokenizer,
-    male_sentences,
-    female_sentences,
-    neutral_sentences,
+        model,
+        tokenizer,
+        male_sentences,
+        female_sentences,
+        neutral_sentences,
 ):
     """Encodes gender sentences to create a set of representations to train classifiers
     for INLP on.
@@ -35,7 +35,12 @@ def _extract_gender_features(
                 sentence, add_special_tokens=True, truncation=True, return_tensors="pt"
             ).to(device)
 
-            outputs = model(**input_ids)["last_hidden_state"]
+            outputs = model(**input_ids)
+            if "last_hidden_state" not in outputs.keys():
+                hidden_states = outputs.hidden_states
+                outputs = hidden_states[-1]
+            else:
+                outputs = outputs["last_hidden_state"]
             outputs = torch.mean(outputs, dim=1)
             outputs = outputs.squeeze().detach().cpu().numpy()
 
@@ -46,7 +51,12 @@ def _extract_gender_features(
                 sentence, add_special_tokens=True, truncation=True, return_tensors="pt"
             ).to(device)
 
-            outputs = model(**input_ids)["last_hidden_state"]
+            outputs = model(**input_ids)
+            if "last_hidden_state" not in outputs.keys():
+                hidden_states = outputs.hidden_states
+                outputs = hidden_states[-1]
+            else:
+                outputs = outputs["last_hidden_state"]
             outputs = torch.mean(outputs, dim=1)
             outputs = outputs.squeeze().detach().cpu().numpy()
 
@@ -57,7 +67,12 @@ def _extract_gender_features(
                 sentence, add_special_tokens=True, truncation=True, return_tensors="pt"
             ).to(device)
 
-            outputs = model(**input_ids)["last_hidden_state"]
+            outputs = model(**input_ids)
+            if "last_hidden_state" not in outputs.keys():
+                hidden_states = outputs.hidden_states
+                outputs = hidden_states[-1]
+            else:
+                outputs = outputs["last_hidden_state"]
             outputs = torch.mean(outputs, dim=1)
             outputs = outputs.squeeze().detach().cpu().numpy()
 
@@ -90,7 +105,12 @@ def _extract_binary_features(model, tokenizer, bias_sentences, neutral_sentences
                 sentence, add_special_tokens=True, truncation=True, return_tensors="pt"
             ).to(device)
 
-            outputs = model(**input_ids)["last_hidden_state"]
+            outputs = model(**input_ids)
+            if "last_hidden_state" not in outputs.keys():
+                hidden_states = outputs.hidden_states
+                outputs = hidden_states[-1]
+            else:
+                outputs = outputs["last_hidden_state"]
             outputs = torch.mean(outputs, dim=1)
             outputs = outputs.squeeze().detach().cpu().numpy()
 
@@ -101,7 +121,12 @@ def _extract_binary_features(model, tokenizer, bias_sentences, neutral_sentences
                 sentence, add_special_tokens=True, truncation=True, return_tensors="pt"
             ).to(device)
 
-            outputs = model(**input_ids)["last_hidden_state"]
+            outputs = model(**input_ids)
+            if "last_hidden_state" not in outputs.keys():
+                hidden_states = outputs.hidden_states
+                outputs = hidden_states[-1]
+            else:
+                outputs = outputs["last_hidden_state"]
             outputs = torch.mean(outputs, dim=1)
             outputs = outputs.squeeze().detach().cpu().numpy()
 
@@ -155,7 +180,7 @@ def _split_binary_dataset(bias_feat, neut_feat):
 
 
 def _apply_nullspace_projection(
-    X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=80
+        X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=80
 ):
     classifier_parameters = {
         "fit_intercept": False,

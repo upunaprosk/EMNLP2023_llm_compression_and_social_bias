@@ -9,6 +9,9 @@ def _is_generative(model):
         "SelfDebiasGPT2LMHeadModel",
         "GPTNeoXForCausalLM",
         "QuantizedGPTNeoXForCausalLM",
+        "SelfDebiasLLAMALMHeadModel",
+        "SelfDebiasOPTLMHeadModel",
+        "AutoModelForCausalLM"
     ]
 
 

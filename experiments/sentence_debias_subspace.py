@@ -28,7 +28,7 @@ parser.add_argument(
     "--model",
     action="store",
     type=str,
-    default="BertModel",
+    default="AutoModelForCausalLM",
     # choices=["BertModel", "AlbertModel", "RobertaModel", "GPT2Model"],
     help="Model (e.g., BertModel) to compute the SentenceDebias subspace for. "
     "Typically, these correspond to a HuggingFace class.",
@@ -37,7 +37,7 @@ parser.add_argument(
     "--model_name_or_path",
     action="store",
     type=str,
-    default="bert-base-uncased",
+    default="opt-125m",
     # choices=["bert-base-uncased", "albert-base-v2", "roberta-base", "gpt2"],
     help="HuggingFace model name or path (e.g., bert-base-uncased). Checkpoint from which a "
     "model is instantiated.",

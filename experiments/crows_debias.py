@@ -44,6 +44,8 @@ parser.add_argument(
         "SelfDebiasAlbertForMaskedLM",
         "SelfDebiasRobertaForMaskedLM",
         "SelfDebiasGPT2LMHeadModel",
+        "SelfDebiasLLAMALMHeadModel",
+        "SelfDebiasOPTLMHeadModel"
     ],
     help="Model to evalute (e.g., SentenceDebiasBertForMaskedLM). Typically, these "
     "correspond to a HuggingFace class.",

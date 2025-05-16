@@ -5,8 +5,8 @@ from typing import Union
 import torch
 import transformers
 
-#from bias_bench.debias.self_debias.modeling import GPT2Wrapper
-#from bias_bench.debias.self_debias.modeling import MaskedLMWrapper
+from bias_bench.debias.self_debias.modeling import GPT2Wrapper, OPTWrapper, LLamaWrapper
+from bias_bench.debias.self_debias.modeling import MaskedLMWrapper
 from bias_bench.util.compress_utils import DYNAMIC, QAT, PTQ, parse_precision, STATIC, quantize_static
 
 n_gpus = torch.cuda.device_count()
@@ -136,6 +136,7 @@ class RobertaForMaskedLM:
 class GPT2LMHeadModel:
     def __new__(self, model_name_or_path):
         return transformers.GPT2LMHeadModel.from_pretrained(model_name_or_path)
+
 
 class GPTNeoXModel:
     def __new__(self, model_name_or_path, revision, cache_dir=None):
@@ -653,4 +654,16 @@ class SelfDebiasRobertaForMaskedLM:
 class SelfDebiasGPT2LMHeadModel:
     def __new__(self, model_name_or_path):
         model = GPT2Wrapper(model_name_or_path, use_cuda=False)
+        return model
+
+
+class SelfDebiasOPTLMHeadModel:
+    def __new__(self, model_name_or_path):
+        model = OPTWrapper(model_name_or_path, use_cuda=False)
+        return model
+
+
+class SelfDebiasLLAMALMHeadModel:
+    def __new__(self, model_name_or_path):
+        model = LLamaWrapper(model_name_or_path, use_cuda=False)
         return model

@@ -10,7 +10,7 @@ from transformers import (
     T5ForConditionalGeneration,
     LlamaForCausalLM,OPTForCausalLM
 )
-from transformers.generation_utils import (
+from transformers.generation.utils import (
     GenerationMixin,
     SampleOutput,
     SampleEncoderDecoderOutput,

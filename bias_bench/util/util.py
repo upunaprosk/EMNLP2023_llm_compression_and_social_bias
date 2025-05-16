@@ -22,4 +22,6 @@ def _is_self_debias(model):
         "SelfDebiasBertForMaskedLM",
         "SelfDebiasAlbertForMaskedLM",
         "SelfDebiasRobertaForMaskedLM",
+        "SelfDebiasLLAMALMHeadModel",
+        "SelfDebiasOPTLMHeadModel",
     ]

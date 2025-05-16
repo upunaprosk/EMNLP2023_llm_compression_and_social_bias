@@ -19,6 +19,13 @@ parser.add_argument(
     help="Directory where all persistent data will be stored.",
 )
 parser.add_argument(
+    "--file_name",
+    action="store",
+    type=str,
+    default="test.json",
+    help="Filename for evaluation.",
+)
+parser.add_argument(
     "--model",
     action="store",
     type=str,
@@ -149,7 +156,7 @@ if __name__ == "__main__":
     runner = StereoSetRunner(
         intrasentence_model=model,
         tokenizer=tokenizer,
-        input_file=f"{args.persistent_dir}/data/stereoset/test.json",
+        input_file=f"{args.persistent_dir}/data/stereoset/{args.file_name}",
         model_name_or_path=args.model_name_or_path,
         batch_size=args.batch_size,
         is_generative=_is_generative_model,

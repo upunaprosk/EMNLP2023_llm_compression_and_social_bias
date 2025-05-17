@@ -50,6 +50,15 @@ parser.add_argument(
     default=80,
     help="Number of classifiers to train when computing projection matrix.",
 )
+
+parser.add_argument(
+    "--input_dim",
+    action="store",
+    type=int,
+    default=768,
+    help="The dimension of the projection matrix.",
+)
+
 parser.add_argument("--seed", action="store", type=int, default=0, help="Seed for RNG.")
 
 
@@ -86,6 +95,7 @@ if __name__ == "__main__":
         data,
         bias_type=args.bias_type,
         n_classifiers=args.n_classifiers,
+        input_dim=args.input_dim
     )
 
     print(

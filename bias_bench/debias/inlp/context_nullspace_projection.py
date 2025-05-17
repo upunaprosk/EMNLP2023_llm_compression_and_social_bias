@@ -180,7 +180,7 @@ def _split_binary_dataset(bias_feat, neut_feat):
 
 
 def _apply_nullspace_projection(
-        X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=80
+        X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=80, input_dim = 768
 ):
     classifier_parameters = {
         "fit_intercept": False,
@@ -193,7 +193,7 @@ def _apply_nullspace_projection(
         classifier_class=LinearSVC,
         cls_params=classifier_parameters,
         num_classifiers=n_classifiers,
-        input_dim=768,
+        input_dim=input_dim,
         is_autoregressive=True,
         min_accuracy=0,
         X_train=X_train,
@@ -209,7 +209,7 @@ def _apply_nullspace_projection(
     return P, rowspace_projs, Ws
 
 
-def compute_projection_matrix(model, tokenizer, data, bias_type, n_classifiers=80):
+def compute_projection_matrix(model, tokenizer, data, bias_type, n_classifiers=80, input_dim=768):
     """Runs INLP.
 
     Notes:
@@ -256,7 +256,7 @@ def compute_projection_matrix(model, tokenizer, data, bias_type, n_classifiers=8
     )
 
     P, rowspace_projs, Ws = _apply_nullspace_projection(
-        X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=n_classifiers
+        X_train, X_dev, X_test, Y_train, Y_dev, Y_test, n_classifiers=n_classifiers, input_dim = input_dim
     )
 
     P = torch.tensor(P, dtype=torch.float32)

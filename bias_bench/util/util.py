@@ -1,6 +1,6 @@
 def _is_generative(model):
     # Checks if we are running an autoregressive model.
-    return model in [
+    generative_class = model in [
         "GPT2LMHeadModel",
         "SentenceDebiasGPT2LMHeadModel",
         "INLPGPT2LMHeadModel",
@@ -13,6 +13,11 @@ def _is_generative(model):
         "SelfDebiasOPTLMHeadModel",
         "AutoModelForCausalLM"
     ]
+    if not generative_class:
+        for m in ['opt', 'llama', 'mistral', 'causal', 'qwen', 'gemma', 'gpt', 'bloom']:
+            if m in model.lower():
+                generative_class=True
+    return generative_class
 
 
 def _is_self_debias(model):

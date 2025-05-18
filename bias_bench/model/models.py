@@ -217,7 +217,14 @@ class _INLPModel:
     def __init__(self, model_name_or_path, projection_matrix):
         def _hook(module, input_, output, projection_matrix):
             # Debias the last hidden state.
-            x = output["last_hidden_state"]
+            x = output
+            opt_or_llama=False
+            if "last_hidden_state" not in output.keys():
+                hidden_states = output.hidden_states
+                x = hidden_states[-1]
+                opt_or_llama=True
+            else:
+                x = output["last_hidden_state"]
 
             # Ensure that everything is on the same device.
             projection_matrix = projection_matrix.to(x.device)
@@ -225,8 +232,11 @@ class _INLPModel:
             for t in range(x.size(1)):
                 x[:, t] = torch.matmul(projection_matrix, x[:, t].T).T
 
-            # Update the output.
-            output["last_hidden_state"] = x
+            if opt_or_llama:
+                output.hidden_states[-1] = x
+            else:
+                # Update the output.
+                output["last_hidden_state"] = x
 
             return output
 
@@ -359,6 +369,23 @@ class INLPGPT2LMHeadModel(_INLPModel):
         model = transformers.GPT2LMHeadModel.from_pretrained(model_name_or_path)
         model.transformer.register_forward_hook(self.func)
         return model
+
+
+class INLPOPTLMHeadModel(_INLPModel):
+    def __new__(self, model_name_or_path, projection_matrix):
+        super().__init__(self, model_name_or_path, projection_matrix)
+        model = transformers.OPTForCausalLM.from_pretrained(model_name_or_path)
+        model.transformer.register_forward_hook(self.func)
+        return model
+
+class INLPLlamaLMHeadModel(_INLPModel):
+    def __new__(self, model_name_or_path, projection_matrix):
+        super().__init__(self, model_name_or_path, projection_matrix)
+        model = transformers.LlamaForCausalLM.from_pretrained(model_name_or_path)
+        model.transformer.register_forward_hook(self.func)
+        return model
+
+
 
 
 class CDABertModel:

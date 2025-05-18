@@ -33,6 +33,8 @@ parser.add_argument(
         "INLPAlbertForMaskedLM",
         "INLPRobertaForMaskedLM",
         "INLPGPT2LMHeadModel",
+        "INLPOPTLMHeadModel",
+        "INLPLlamaLMHeadModel",
         "CDABertForMaskedLM",
         "CDAAlbertForMaskedLM",
         "CDARobertaForMaskedLM",
@@ -47,6 +49,7 @@ parser.add_argument(
         "SelfDebiasRobertaForMaskedLM",
         "SelfDebiasLLAMALMHeadModel",
         "SelfDebiasOPTLMHeadModel"
+
     ],
     help="Model to evaluate (e.g., SentenceDebiasBertForMaskedLM).",
 )
